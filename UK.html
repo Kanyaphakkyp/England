@@ -1,0 +1,440 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+crossorigin="" />
+
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin="">
+</script>
+
+ <style>
+#mapid {
+height: 500px;
+}
+</style>
+
+ <title>England Tourist map</title>
+
+ <h1><center><b style="color: #FFFFFF;"> ENGLAND TOURIST MAP🏴󠁧󠁢󠁥󠁮󠁧󠁿 <b></center></h1>
+  <p style="color:#8B7765;"><strong><em> by kanyaphak 244 </em></strong></p>
+</head>
+<body>
+  <body style="background-image: url(england2.jpeg);">
+<!-- แบ่งหน้าจอ -->
+<div class="w3-row">
+        <div id="mapid" class="w3-half"></div>
+        <div id="content" class="w3-half">
+            <table class="w3-table w3-striped">
+                <tr>
+                    <th>ชื่อแหล่งท่องเที่ยว</th>
+                    <th>ประเภท</th>
+                    <th>ระดับ</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+<!-- เรียกแผนที่ขึ้นมาแสดง -->
+<script>
+var map = L.map("mapid").setView([51.984108591931054, -0.6744402867405185],6);
+//based map1
+var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+           .addTo(map);
+//baesd map2
+var gsat = L.tileLayer("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}")
+            .addTo(map);
+//group layers (1+2)
+var baseMaps ={
+//ชื่อชั้นข้อมูล:ตัวแปร
+OSM:osm,
+GoogleSat:gsat
+};
+var tourpoint = {
+type: "FeatureCollection",
+name: "tour_plk",
+crs: {
+type: "name",
+properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+},
+features: [
+{
+type: "Feature",
+properties: {
+Name: "Big Ben",
+Type: "	Clock tower",
+FID_1: 1358.0,
+CHANGWAT: "London",
+PROVINCE_1: "-",
+REGION: "-",
+level: "⭐️⭐️⭐️⭐️⭐️",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[-0.12458248700497714,51.500876111908]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "Stonehenge",
+Type: "อนุสรณ์สถาน",
+FID_1: 1358.1,
+CHANGWAT: "wiltshire",
+PROVINCE_1: "-",
+REGION: "-",
+level: "⭐️⭐️⭐️⭐️⭐️",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[-1.8268463227468867,51.180711384242315]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "Windsor Castle",
+Type: "สถานที่ท่องเที่ยว",
+FID_1: 1362.0,
+CHANGWAT: "-",
+PROVINCE_1: "-",
+level: "⭐️⭐️⭐️⭐️⭐️",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[-0.6038877182473448,51.48399419778159]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "York Minster",
+Type: "คริสต์ศาสนสถาน",
+FID_1: 1364.0,
+CHANGWAT: "-",
+PROVINCE_1: "-",
+REGION: "-",
+level: "⭐️⭐️⭐️⭐️⭐️",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[-1.0819419598956816,53.96242385935905]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "Durham Cathedral",
+Type: "คริสตจักรมหาวิหาร",
+FID_1: 1355.0,
+CHANGWAT: "-",
+PROVINCE_1: "-",
+REGION: "-",
+level: "⭐️⭐️⭐️⭐️⭐️",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[-1.5764028310192888,54.77331951980848]],
+},
+},
+],
+};
+//add maeker and popup
+var tourLayer = L.geoJSON(tourpoint, {
+pointToLayer: function (feature, latlng) {
+return L.marker(latlng).bindPopup(feature.properties.Name);
+},
+onEachFeature: function (feature, layer) {
+layer.on("mouseover", function () {
+document
+.getElementById(feature.properties.FID_1)
+.classList.add("w3-red");
+});
+
+ layer.on("mouseout", function () {
+document
+.getElementById(feature.properties.FID_1)
+.classList.remove("w3-red");
+});
+},
+}).addTo(map);
+
+var cont = "";
+cont += "<table class='w3-table w3-striped'>";
+cont += "<tr>";
+cont += "<th>ชื่อแหล่งท่องเที่ยว</th>";
+cont += "<th>ประเภท</th>";
+cont += "<th>ระดับ</th>";
+cont += "</tr>";
+for (let i in tourpoint.features) {
+cont += "<tr id=" + tourpoint.features[i].properties.FID_1 + ">";
+cont += "<td>" + tourpoint.features[i].properties.Name + "</td>";
+cont += "<td>" + tourpoint.features[i].properties.Type + "</td>";
+cont += "<td>" + tourpoint.features[i].properties.level + "</td>";
+cont += "</tr>";
+}
+cont += "</table>";
+console.log(cont);
+document.getElementById("content").innerHTML = cont;
+
+var polygonGeoJson = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#555555",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "fill": "#ff8080",
+        "fill-opacity": 0.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.021484375,
+              55.801280971180454
+            ],
+            [
+              -2.4169921874999996,
+              55.56592203025787
+            ],
+            [
+              -2.61474609375,
+              55.16631894125083
+            ],
+            [
+              -2.900390625,
+              55.040614327716746
+            ],
+            [
+              -3.251953125,
+              54.88924640307589
+            ],
+            [
+              -3.3618164062499996,
+              54.41892996865827
+            ],
+            [
+              -3.2080078125,
+              54.213861000644926
+            ],
+            [
+              -3.1640625,
+              53.48804553605622
+            ],
+            [
+              -2.8564453125,
+              53.330872983017066
+            ],
+            [
+              -2.900390625,
+              53.14677033085082
+            ],
+            [
+              -2.96630859375,
+              52.74959372674114
+            ],
+            [
+              -3.0322265625,
+              52.40241887397332
+            ],
+            [
+              -2.9443359375,
+              51.68617954855624
+            ],
+            [
+              -2.39501953125,
+              51.83577752045248
+            ],
+            [
+              -2.96630859375,
+              51.34433866059924
+            ],
+            [
+              -3.75732421875,
+              51.193115244645874
+            ],
+            [
+              -4.39453125,
+              51.069016659603896
+            ],
+            [
+              -4.39453125,
+              50.86144411058924
+            ],
+            [
+              -5.03173828125,
+              50.47149085139956
+            ],
+            [
+              -5.55908203125,
+              50.10648772767332
+            ],
+            [
+              -5.2294921875,
+              50.064191736659104
+            ],
+            [
+              -4.833984374999999,
+              50.162824333817284
+            ],
+            [
+              -4.06494140625,
+              50.10648772767332
+            ],
+            [
+              -3.6254882812499996,
+              50.41551870402678
+            ],
+            [
+              -3.27392578125,
+              50.56928286558243
+            ],
+            [
+              -2.79052734375,
+              50.56928286558243
+            ],
+            [
+              -2.30712890625,
+              50.56928286558243
+            ],
+            [
+              -1.0107421875,
+              50.666872321810715
+            ],
+            [
+              -0.19775390625,
+              50.875311142200765
+            ],
+            [
+              0.615234375,
+              50.93073802371819
+            ],
+            [
+              1.23046875,
+              51.138001488062564
+            ],
+            [
+              1.494140625,
+              51.42661449707482
+            ],
+            [
+              0.52734375,
+              51.440312757160115
+            ],
+            [
+              0.9667968749999999,
+              51.713416052417614
+            ],
+            [
+              1.5380859375,
+              52.17393169256849
+            ],
+            [
+              1.9555664062500002,
+              52.802761415419674
+            ],
+            [
+              1.0546875,
+              52.96187505907603
+            ],
+            [
+              0.5712890625,
+              52.908902047770255
+            ],
+            [
+              0.3955078125,
+              52.8823912222619
+            ],
+            [
+              0.1318359375,
+              52.8823912222619
+            ],
+            [
+              0.52734375,
+              53.238920640924974
+            ],
+            [
+              -0.2197265625,
+              53.657661020298
+            ],
+            [
+              0.10986328125,
+              53.73571574532637
+            ],
+            [
+              -0.263671875,
+              54.08517342088679
+            ],
+            [
+              -0.02197265625,
+              54.18815548107151
+            ],
+            [
+              -1.07666015625,
+              54.62297813269033
+            ],
+            [
+              -1.51611328125,
+              55.25407706707272
+            ],
+            [
+              -1.58203125,
+              55.60317816902704
+            ],
+            [
+              -1.9116210937499998,
+              55.7642131648377
+            ],
+            [
+              -2.021484375,
+              55.801280971180454
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+
+var polygonLayer = L.geoJSON(polygonGeoJson, {
+style: function (feature) {
+return { color: feature.properties.color };
+},
+onEachFeature: function (feature, layer) {
+layer.bindPopup(feature.properties.name);
+
+ layer.on("mouseover", function () {
+layer.openPopup();
+});
+
+ layer.on("mouseout", function () {
+layer.closePopup();
+});
+},
+});
+
+
+var overlay = {
+    สถานที่ท่องเที่ยว:tourLayer,
+    ขอบเขตการท่องเที่ยว:polygonLayer
+};
+
+L.control.layers(baseMaps,overlay).addTo(map);
+</script>
+
+</body>
+</html>
